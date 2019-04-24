@@ -1,9 +1,12 @@
 # specAugment
 This repository is implementation of SpecAugment.  
-for Tensorflow.
+For Tensorflow.
+
+This is not include LAS or other network.  
+I Just Implementing include time warping and masking part.  
+
 
 ref : https://arxiv.org/pdf/1904.08779.pdf
-
 ---
 ## About
 In paper(SpecAugment) proposed 3 augmentation polcy
@@ -26,7 +29,15 @@ In this Implementation, I define funtion "spec_augment"
 ---
 ## How to use
 1. install packages
-- pip install -r requirements.txt
+'''python
+ pip install -r requirements.txt
+'''
 
 2. run 
-- python specAugment.py
+'''python
+python specAugment.py
+'''
+
+3. result
+run this code you can see the result of masked audio mel-spectrogram
+
