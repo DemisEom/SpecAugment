@@ -1,8 +1,27 @@
 # SpecAugment
-This is a implementation of SpecAugment with Tensorflow, introduced by Google Brain[1]. It modifies the spectrogram by warping it in the time direction, masking blocks of consecutive frequency channels, and masking blocks of utterances in time. 
+This is a implementation of SpecAugment with Tensorflow, introduced by Google Brain[1]. 
 
 
 ... 
+
+# How to use
+
+To install the requirement packages. Run the following command:
+```python
+ pip install -r requirements.txt
+```
+
+And then, run the specAugment.py program. It modifies the spectrogram by warping it in the time direction, masking blocks of consecutive frequency channels, and masking blocks of utterances in time.  
+
+```python
+python specAugment.py
+```
+
+<p align="center">
+  <img src="https://github.com/shelling203/specAugment/blob/master/images/Figure_1.png" alt="Example result of base spectrogram"/ width=600>
+  <img src="https://github.com/shelling203/specAugment/blob/master/images/Figure_2.png" alt="Example result of base spectrogram"/ width=600>
+</p> 
+
 
 # Reference
 
@@ -45,8 +64,8 @@ python specAugment.py
 run this code you can see the result of masked audio mel-spectrogram
 
 <p align="center">
-  <img src="https://github.com/shelling203/specAugment/blob/master/images/Figure_1.png" alt="Example result of base spectrogram"/>
-  <img src="https://github.com/shelling203/specAugment/blob/master/images/Figure_2.png" alt="Example result of base spectrogram"/>
+  <img src="https://github.com/shelling203/specAugment/blob/master/images/Figure_1.png" alt="Example result of base spectrogram"/ width=600>
+  <img src="https://github.com/shelling203/specAugment/blob/master/images/Figure_2.png" alt="Example result of base spectrogram"/ width=600>
 </p> 
 
 
