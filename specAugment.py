@@ -6,10 +6,6 @@ import librosa.display
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
-import os
-import PIL.Image
-from keras_preprocessing import image as kp_image
-from PIL import Image
 
 def spec_augment(input, time_warping_para, time_masking_para, frequency_masking_para, num_mask):
   raw = input
@@ -27,6 +23,7 @@ def spec_augment(input, time_warping_para, time_masking_para, frequency_masking_
   #                                             name='sparse_image_warp'
   #                                             )
 
+  # repeat number of mask lines
   for i in range(num_mask):
 
     #Frequency masking
@@ -50,25 +47,25 @@ def spec_augment(input, time_warping_para, time_masking_para, frequency_masking_
 audio_path = "./data"
 audio_file = "./data/61-70968-0002.wav"
 
-
-# DATA = load_sounds_in_folder(audio_path)
-
+# extract melspectrogram
 y, sr = librosa.load(audio_file)
 S = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=128, fmax=8000)
 
 ## show base mel-spectrogram
+plt.figure(figsize=(10, 4))
 librosa.display.specshow(librosa.power_to_db(S, ref=np.max), y_axis='mel', fmax=8000, x_axis='time')
 plt.colorbar(format='%+2.0f dB')
 plt.title('Mel spectrogram')
 plt.tight_layout()
 plt.show()
 
-# show masked spectrogram
+# doing specaugment spectrogram
 masked_spec = spec_augment(S, time_warping_para=80,
                            time_masking_para=100,
                            frequency_masking_para=27,
                            num_mask=1)
 
+# show time waped & masked spectrogram
 plt.figure(figsize=(10, 4))
 librosa.display.specshow(librosa.power_to_db(masked_spec, ref=np.max), y_axis='mel', fmax=8000, x_axis='time')
 plt.colorbar(format='%+2.0f dB')
