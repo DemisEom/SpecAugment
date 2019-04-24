@@ -40,19 +40,17 @@ def spec_augment(input, time_warping_para, time_masking_para, frequency_masking_
   # repeat number of mask lines
   for i in range(num_mask):
 
-    #Frequency masking
+    # Frequency masking
     f = np.random.uniform(low=0.0, high = frequency_masking_para)
     f = int(f)
-    v = 128
+    v = 128  # Now hard coding but I will improve soon.
     f0 = random.randint(0, v - f)
-
     raw[f0:f0+f, :] = 0
 
-    #time masking
+    # Time masking
     t = np.random.uniform(low=0.0, high = time_masking_para)
     t = int(t)
     t0 = random.randint(0, ta-t)
-
     raw[:, t0:t0+t] = 0
 
   return raw
@@ -65,7 +63,7 @@ audio_file = "./data/61-70968-0002.wav"
 y, sr = librosa.load(audio_file)
 S = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=128, fmax=8000)
 
-## show base mel-spectrogram
+# Show base mel-spectrogram
 plt.figure(figsize=(10, 4))
 librosa.display.specshow(librosa.power_to_db(S, ref=np.max), y_axis='mel', fmax=8000, x_axis='time')
 plt.colorbar(format='%+2.0f dB')
@@ -73,13 +71,13 @@ plt.title('Mel spectrogram')
 plt.tight_layout()
 plt.show()
 
-# doing specaugment spectrogram
+# Doing spec augment spectrogram
 masked_spec = spec_augment(S, time_warping_para=80,
                            time_masking_para=100,
                            frequency_masking_para=27,
                            num_mask=1)
 
-# show time waped & masked spectrogram
+# Show time warped & masked spectrogram
 plt.figure(figsize=(10, 4))
 librosa.display.specshow(librosa.power_to_db(masked_spec, ref=np.max), y_axis='mel', fmax=8000, x_axis='time')
 plt.colorbar(format='%+2.0f dB')
