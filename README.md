@@ -5,11 +5,12 @@ for Tensorflow.
 ref : https://arxiv.org/pdf/1904.08779.pdf
 
 ---
-# About
+## About
 In paper(SpecAugment) proposed 3 augmentation polcy
 
-1. Time Warping
--
+1. Time Warping(To do...)
+- In paper using Tensorflow's "sparse image warp ". 
+- This i implementing now.
 
 2. Frequency masking
 - 
@@ -18,15 +19,14 @@ In paper(SpecAugment) proposed 3 augmentation polcy
 - 
 
 ---
-# Working Env.
--python 3.7
+## In Implementation
+In this Implementation, I define funtion "spec_augment"
 
 
 ---
-# How to use
+## How to use
 1. install packages
 - pip install -r requirements.txt
-
 
 2. run 
 - python specAugment.py
