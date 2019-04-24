@@ -41,6 +41,11 @@ python specAugment.py
 3. result
 run this code you can see the result of masked audio mel-spectrogram
 
+<p align="center">
+  <img src="https://github.com/shelling203/specAugment/images/Figure_1.png" alt="Example result of base spectrogram"/>
+  <img src="https://github.com/shelling203/specAugment/images/Figure_2.png" alt="Example result of base spectrogram"/>
+</p> 
+
 
 ## Notes
 - now I implementing time warp part. but, sparse image warp of tensorflow don't have specific reference.
