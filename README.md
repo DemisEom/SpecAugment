@@ -44,8 +44,8 @@ python specAugment.py
 run this code you can see the result of masked audio mel-spectrogram
 
 <p align="center">
-  <img src="https://github.com/shelling203/specAugment/images/Figure_1.png" alt="Example result of base spectrogram"/>
-  <img src="https://github.com/shelling203/specAugment/images/Figure_2.png" alt="Example result of base spectrogram"/>
+  <img src="https://github.com/shelling203/specAugment/blob/master/images/Figure_1.png" alt="Example result of base spectrogram"/>
+  <img src="https://github.com/shelling203/specAugment/blob/master/images/Figure_2.png" alt="Example result of base spectrogram"/>
 </p> 
 
 
