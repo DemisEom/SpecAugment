@@ -7,20 +7,15 @@ import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 import os
-
-def load_sounds_in_folder(foldername):
-    """ Loads all sounds in a folder"""
-    sounds = []
-    for filename in os.listdir(foldername):
-        X, sr = librosa.load(os.path.join(foldername,filename))
-        sounds.append(X)
-    return sounds
+import PIL.Image
+from keras_preprocessing import image as kp_image
+from PIL import Image
 
 def spec_augment(input, time_warping_para, time_masking_para, frequency_masking_para, num_mask):
   raw = input
   ta = 128
 
-  # time warping
+  ## todo : time warping
   # raw = raw.reshape([1, raw.shape[0], raw.shape[1], 1])
   # w = random.randint(0, time_warping_para)
   # warped = tf.contrib.image.sparse_image_warp(raw,
@@ -51,9 +46,10 @@ def spec_augment(input, time_warping_para, time_masking_para, frequency_masking_
 
   return raw
 
-## mel spectrogram test
+# load audio file
 audio_path = "./data"
 audio_file = "./data/61-70968-0002.wav"
+
 
 # DATA = load_sounds_in_folder(audio_path)
 
@@ -79,8 +75,4 @@ plt.colorbar(format='%+2.0f dB')
 plt.title('Mel spectrogram MASKED')
 plt.tight_layout()
 plt.show()
-
-print(S)
-
-
 
