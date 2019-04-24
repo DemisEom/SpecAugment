@@ -55,7 +55,7 @@ def spec_augment(input, time_warping_para, time_masking_para, frequency_masking_
 
   return raw
 
-# load audio file
+# load sample audio file in librispeech dataset
 audio_path = "./data"
 audio_file = "./data/61-70968-0002.wav"
 
