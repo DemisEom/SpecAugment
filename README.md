@@ -1,6 +1,8 @@
-# specAugment
-This repository is implementation of SpecAugment.  
-For Tensorflow.
+# SpecAugment
+This is a implementation of SpecAugment with Tensorflow, introduced by Google Brain[1]. It modifies the spectrogram by warping it in the time direction, masking blocks of consecutive frequency channels, and masking blocks of utterances in time. 
+
+
+... 
 
 This is not include LAS or other network.  
 I Just Implementing include time warping and masking part.  
