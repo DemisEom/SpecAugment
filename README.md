@@ -13,7 +13,7 @@ Next, you need to install some audio libraries work properly. To install the req
 
 And then, run the specAugment.py program. It modifies the spectrogram by warping it in the time direction, masking blocks of consecutive frequency channels, and masking blocks of utterances in time.  
 
-> python specAugment.py
+> python spec_augment.py
 
 <p align="center">
   <img src="https://github.com/shelling203/specAugment/blob/master/images/Figure_1.png" alt="Example result of base spectrogram"/ width=600>
