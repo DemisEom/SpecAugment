@@ -23,12 +23,10 @@ In paper(SpecAugment) proposed 3 augmentation polcy
 3. Time masking
 - 
 
----
 ## In Implementation
 In this Implementation, I define funtion "spec_augment"
 
 
----
 ## How to use
 1. install packages
 '''python
