@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from tensorflow.contrib.image.python.ops import sparse_image_warp
 import tensorflow as tf
 import numpy as np
 import librosa
@@ -20,8 +21,19 @@ import librosa.display
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
+from tensorflow.python.framework import constant_op
 
-def spec_augment(input, time_warping_para, time_masking_para, frequency_masking_para, num_mask):
+def spec_augment(input, time_warping_para, frequency_masking_para, time_masking_para, num_mask):
+  """Compute spec augmentation.
+  Args:
+    input: mel-spectrogram, numpy array
+    time_warping_para:
+    frequency_masking_para:
+    time_masking_para:
+    num_mask : number of masking line
+  Returns:
+    raw : warped and masked mel spectrogram
+  """
   raw = input
   ta = 128
 
@@ -37,33 +49,34 @@ def spec_augment(input, time_warping_para, time_masking_para, frequency_masking_
   #                                             name='sparse_image_warp'
   #                                             )
 
-  # repeat number of mask lines
-  for i in range(num_mask):
-
-    # Frequency masking
-    f = np.random.uniform(low=0.0, high = frequency_masking_para)
-    f = int(f)
-    v = 128  # Now hard coding but I will improve soon.
-    f0 = random.randint(0, v - f)
-    raw[f0:f0+f, :] = 0
-
-    # Time masking
-    t = np.random.uniform(low=0.0, high = time_masking_para)
-    t = int(t)
-    t0 = random.randint(0, ta-t)
-    raw[:, t0:t0+t] = 0
+  # # repeat number of mask lines
+  # for i in range(num_mask):
+  #
+  #   # Frequency masking
+  #   f = np.random.uniform(low=0.0, high = frequency_masking_para)
+  #   f = int(f)
+  #   v = 128  # Now hard coding but I will improve soon.
+  #   f0 = random.randint(0, v - f)
+  #   raw[f0:f0+f, :] = 0
+  #
+  #   # Time masking
+  #   t = np.random.uniform(low=0.0, high = time_masking_para)
+  #   t = int(t)
+  #   t0 = random.randint(0, ta-t)
+  #   raw[:, t0:t0+t] = 0
 
   return raw
 
-# load sample audio file in librispeech dataset
+# First, we need to load sample audio file
+# we use one of the LibriSpeech data
 audio_path = "./data"
 audio_file = "./data/61-70968-0002.wav"
-
-# extract melspectrogram
 y, sr = librosa.load(audio_file)
+
+# for extracting mel-spectrogram feature, we using LibSosa.
 S = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=128, fmax=8000)
 
-# Show base mel-spectrogram
+# we can see extracted mel-spectrogram just simple method using 'specshow'
 plt.figure(figsize=(10, 4))
 librosa.display.specshow(librosa.power_to_db(S, ref=np.max), y_axis='mel', fmax=8000, x_axis='time')
 plt.colorbar(format='%+2.0f dB')
