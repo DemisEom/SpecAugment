@@ -5,7 +5,7 @@ For Tensorflow.
 This is not include LAS or other network.  
 I Just Implementing include time warping and masking part.  
 
-
+Uisng LibROSA package(https://librosa.github.io/librosa/)
 ref : https://arxiv.org/pdf/1904.08779.pdf
 ---
 ## About
@@ -41,3 +41,6 @@ python specAugment.py
 3. result
 run this code you can see the result of masked audio mel-spectrogram
 
+
+## Notes
+- now I implementing time warp part. but, sparse image warp of tensorflow don't have specific reference.
