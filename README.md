@@ -4,10 +4,13 @@ This is a implementation of SpecAugment with Tensorflow, introduced by Google Br
 
 ... 
 
-This is not include LAS or other network.  
-I Just Implementing include time warping and masking part.  
-  
-ref : https://arxiv.org/pdf/1904.08779.pdf
+# Reference
+
+1. https://arxiv.org/pdf/1904.08779.pdf
+
+
+
+
 
 ---
 ## About
