@@ -13,8 +13,8 @@
 # limitations under the License.
 
 import tensorflow as tf
+from tensorflow.python.framework import constant_op
 import numpy as np
-import librosa
 import random
 import librosa.display
 import matplotlib
@@ -33,7 +33,7 @@ def spec_augment(mel_spectrogram, time_warping_para, frequency_masking_para, tim
     time_masking_para: "Augmentation parameters for policies T", LibriSpeech is 100.
     num_mask : number of masking lines.
   Returns:
-    raw : warped and masked mel spectrogram.
+    mel_spectrogram : warped and masked mel spectrogram.
   """
   tau = 128
 
@@ -45,16 +45,31 @@ def spec_augment(mel_spectrogram, time_warping_para, frequency_masking_para, tim
   from 0 to the time warp parameter W along that line.'
   In paper Using Tensorflow's 'sparse-image-warp'.
   """
-  # raw = raw.reshape([1, raw.shape[0], raw.shape[1], 1])
-  # w = random.randint(0, time_warping_para)
-  # warped = tf.contrib.image.sparse_image_warp(raw,
-  #                                             source_control_point_locations = [1, time_warping_para, 2],
-  #                                             dest_control_point_locations = [1, ta - time_warping_para, 2],
-  #                                             interpolation_order=2,
-  #                                             regularization_weight=0.0,
-  #                                             num_boundary_points=0,
-  #                                             name='sparse_image_warp'
-  #                                             )
+  control_point_locations = [[1., 1.], [64., 64.], [80., 100.]]
+  control_point_locations = constant_op.constant(
+    np.float32(np.expand_dims(control_point_locations, 0)))
+
+  control_point_displacements = np.zeros(
+    control_point_locations.shape.as_list())
+  control_point_displacements = constant_op.constant(
+    np.float32(control_point_displacements))
+
+  mel_spectrogram = mel_spectrogram.reshape([1, mel_spectrogram.shape[0], mel_spectrogram.shape[1], 1])
+  mel_spectrogram_op = constant_op.constant(np.float32(mel_spectrogram))
+  w = random.randint(0, time_warping_para)
+
+  (warped_mel_spectrogram_op, flow_field) = tf.contrib.image.sparse_image_warp(mel_spectrogram_op,
+                                              source_control_point_locations = control_point_locations,
+                                              dest_control_point_locations = control_point_locations + control_point_displacements,
+                                              interpolation_order=2,
+                                              regularization_weight=0,
+                                              num_boundary_points=0
+                                              )
+  with tf.Session() as sess:
+    warped_mel_spectrogram, _ = sess.run([warped_mel_spectrogram_op, flow_field])
+
+  warped_mel_spectrogram = warped_mel_spectrogram.reshape([128, 128])
+  warped_masked_mel_spectrogram = warped_mel_spectrogram
 
   """ Masking line loop """
   for i in range(num_mask):
@@ -68,8 +83,7 @@ def spec_augment(mel_spectrogram, time_warping_para, frequency_masking_para, tim
     f = int(f)
     v = 128  # Now hard coding but I will improve soon.
     f0 = random.randint(0, v - f)
-    mel_spectrogram[f0:f0+f, :] = 0
-
+    warped_masked_mel_spectrogram[f0:f0+f, :] = 0
 
     """Time masking
     In paper Time masking written as follows. 'Time masking is applied so that t consecutive time steps
@@ -80,9 +94,9 @@ def spec_augment(mel_spectrogram, time_warping_para, frequency_masking_para, tim
     t = np.random.uniform(low=0.0, high=time_masking_para)
     t = int(t)
     t0 = random.randint(0, tau-t)
-    mel_spectrogram[:, t0:t0+t] = 0
+    warped_masked_mel_spectrogram[:, t0:t0+t] = 0
 
-  return mel_spectrogram
+  return warped_masked_mel_spectrogram, warped_mel_spectrogram
 
 # First, we need to load sample audio file
 # For the test, I use one of the 'Libiri Speech' data.
@@ -102,17 +116,19 @@ plt.tight_layout()
 plt.show()
 
 # Augmentation using 'SpecAugment(Spectrogram augmentation)"
-masked_spectrogram = spec_augment(mel_spectrogram=mel_spectrogram,
-                                  time_warping_para=80,
-                                  time_masking_para=100,
-                                  frequency_masking_para=27,
-                                  num_mask=1)
+warped_masked_mel_spectrogram, warped_mel_spectrogram = spec_augment(mel_spectrogram=mel_spectrogram,
+                                                                     time_warping_para=80,
+                                                                     time_masking_para=100,
+                                                                     frequency_masking_para=27,
+                                                                     num_mask=1)
 
 # Show time warped & masked spectrogram
 plt.figure(figsize=(10, 4))
-librosa.display.specshow(librosa.power_to_db(masked_spectrogram, ref=np.max), y_axis='mel', fmax=8000, x_axis='time')
+librosa.display.specshow(librosa.power_to_db(warped_masked_mel_spectrogram, ref=np.max), y_axis='mel', fmax=8000, x_axis='time')
 plt.colorbar(format='%+2.0f dB')
-plt.title('Masked Mel Spectrogram')
+plt.title('Warped & Masked Mel Spectrogram')
 plt.tight_layout()
 plt.show()
+
+
 
