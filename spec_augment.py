@@ -88,28 +88,29 @@ def spec_augment(mel_spectrogram, time_warping_para, frequency_masking_para, tim
 # For the test, I use one of the 'Libiri Speech' data.
 audio_path = "./data"
 audio_file = "./data/61-70968-0002.wav"
-y, sr = librosa.load(audio_file)
+audio, sampling_rate = librosa.load(audio_file)
 
 # For extracting mel-spectrogram feature, I use 'LibSosa' python audio package.
-S = librosa.feature.melspectrogram(y=y, sr=sr, n_mels=128, fmax=8000)
+mel_spectrogram = librosa.feature.melspectrogram(y=audio, sr=sampling_rate, n_mels=128, fmax=8000)
 
-# we can see extracted mel-spectrogram just simple method using 'specshow'
+# we can see extracted mel-spectrogram using simple method 'specshow'
 plt.figure(figsize=(10, 4))
-librosa.display.specshow(librosa.power_to_db(S, ref=np.max), y_axis='mel', fmax=8000, x_axis='time')
+librosa.display.specshow(librosa.power_to_db(mel_spectrogram, ref=np.max), y_axis='mel', fmax=8000, x_axis='time')
 plt.colorbar(format='%+2.0f dB')
 plt.title('Mel Spectrogram')
 plt.tight_layout()
 plt.show()
 
-# Doing spec augment spectrogram
-masked_spec = spec_augment(S, time_warping_para=80,
-                           time_masking_para=100,
-                           frequency_masking_para=27,
-                           num_mask=1)
+# Augmentation using 'SpecAugment(Spectrogram augmentation)"
+masked_spectrogram = spec_augment(mel_spectrogram=mel_spectrogram,
+                                  time_warping_para=80,
+                                  time_masking_para=100,
+                                  frequency_masking_para=27,
+                                  num_mask=1)
 
 # Show time warped & masked spectrogram
 plt.figure(figsize=(10, 4))
-librosa.display.specshow(librosa.power_to_db(masked_spec, ref=np.max), y_axis='mel', fmax=8000, x_axis='time')
+librosa.display.specshow(librosa.power_to_db(masked_spectrogram, ref=np.max), y_axis='mel', fmax=8000, x_axis='time')
 plt.colorbar(format='%+2.0f dB')
 plt.title('Masked Mel Spectrogram')
 plt.tight_layout()
