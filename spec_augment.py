@@ -25,14 +25,15 @@ from tensorflow.python.framework import constant_op
 
 def spec_augment(input, time_warping_para, frequency_masking_para, time_masking_para, num_mask):
   """Compute spec augmentation.
+  The Parameters, "Augmentation parameters for policies", refer to the 'Tabel 1' in the paper.
   Args:
-    input: mel-spectrogram, numpy array
-    time_warping_para:
-    frequency_masking_para:
-    time_masking_para:
-    num_mask : number of masking line
+    input: Extracted mel-spectrogram, numpy array.
+    time_warping_para: "Augmentation parameters for policies W", LibriSpeech is 80.
+    frequency_masking_para: "Augmentation parameters for policies F", LibriSpeech is 27.
+    time_masking_para: "Augmentation parameters for policies T", LibriSpeech is 100.
+    num_mask : number of masking lines.
   Returns:
-    raw : warped and masked mel spectrogram
+    raw : warped and masked mel spectrogram.
   """
   raw = input
   ta = 128
@@ -49,21 +50,29 @@ def spec_augment(input, time_warping_para, frequency_masking_para, time_masking_
   #                                             name='sparse_image_warp'
   #                                             )
 
-  # # repeat number of mask lines
-  # for i in range(num_mask):
-  #
-  #   # Frequency masking
-  #   f = np.random.uniform(low=0.0, high = frequency_masking_para)
-  #   f = int(f)
-  #   v = 128  # Now hard coding but I will improve soon.
-  #   f0 = random.randint(0, v - f)
-  #   raw[f0:f0+f, :] = 0
-  #
-  #   # Time masking
-  #   t = np.random.uniform(low=0.0, high = time_masking_para)
-  #   t = int(t)
-  #   t0 = random.randint(0, ta-t)
-  #   raw[:, t0:t0+t] = 0
+  # repeat number of mask lines
+  for i in range(num_mask):
+    """Frequency masking
+    In paper Frequency masking written as follows. 'Frequency masking is applied so that f consecutive mel frequency
+    channels [f0, f0 + f) are masked, where f is first chosen from a uniform distribution from 0 to the frequency mask parameter F,
+    and f0 is chosen from [0, ν − f). ν is the number of mel frequency channels.'
+    """
+    f = np.random.uniform(low=0.0, high = frequency_masking_para)
+    f = int(f)
+    v = 128  # Now hard coding but I will improve soon.
+    f0 = random.randint(0, v - f)
+    raw[f0:f0+f, :] = 0
+
+
+    """Time masking
+    In paper Frequency masking written as follows. 'Time masking is applied so that t consecutive time steps
+    [t0, t0 + t) are masked, where t is first chosen from a uniform distribution from 0 to the time mask parameter T,
+    and t0 is chosen from [0, τ − t).'
+    """
+    t = np.random.uniform(low=0.0, high = time_masking_para)
+    t = int(t)
+    t0 = random.randint(0, ta-t)
+    raw[:, t0:t0+t] = 0
 
   return raw
 
