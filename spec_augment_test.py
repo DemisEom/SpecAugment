@@ -12,15 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+"""Tests for specaugment"""
 import librosa
 import spec_augment
+import cv2
+import numpy as np
 
 if __name__ == "__main__":
 
     # First, we need to load sample audio file
     # For the test, I use one of the 'Libiri Speech' data.
     audio_path = "./data"
-    audio_file = "./data/61-70968-0002.wav"
+    audio_file = "./data/61-70970-0007.wav"
+
     audio, sampling_rate = librosa.load(audio_file)
 
     # For extracting mel-spectrogram feature, I use 'LibSosa' python audio package.
@@ -38,6 +42,5 @@ if __name__ == "__main__":
 
     # Show time warped & masked spectrogram
     spec_augment.visualization_melspectrogram(mel_spectrogram=warped_masked_mel_spectrogram, title="Warped & Masked Mel Spectrogram")
-
 
 
