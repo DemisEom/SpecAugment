@@ -12,11 +12,11 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import librosa.display
 import tensorflow as tf
 from tensorflow.python.framework import constant_op
 import numpy as np
 import random
-import librosa.display
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
@@ -45,6 +45,7 @@ def spec_augment(mel_spectrogram, time_warping_para, frequency_masking_para, tim
   from 0 to the time warp parameter W along that line.'
   In paper Using Tensorflow's 'sparse-image-warp'.
   """
+  # Image warping control point setting
   control_point_locations = [[1., 1.], [64., 64.], [80., 100.]]
   control_point_locations = constant_op.constant(
     np.float32(np.expand_dims(control_point_locations, 0)))
@@ -54,6 +55,7 @@ def spec_augment(mel_spectrogram, time_warping_para, frequency_masking_para, tim
   control_point_displacements = constant_op.constant(
     np.float32(control_point_displacements))
 
+  # mel spectrogram data type convert to tensor constant for sparse_image_warp
   mel_spectrogram = mel_spectrogram.reshape([1, mel_spectrogram.shape[0], mel_spectrogram.shape[1], 1])
   mel_spectrogram_op = constant_op.constant(np.float32(mel_spectrogram))
   w = random.randint(0, time_warping_para)
@@ -65,6 +67,8 @@ def spec_augment(mel_spectrogram, time_warping_para, frequency_masking_para, tim
                                               regularization_weight=0,
                                               num_boundary_points=0
                                               )
+  
+  # Change data type of warp result to numpy array for masking step
   with tf.Session() as sess:
     warped_mel_spectrogram, _ = sess.run([warped_mel_spectrogram_op, flow_field])
 
@@ -98,37 +102,18 @@ def spec_augment(mel_spectrogram, time_warping_para, frequency_masking_para, tim
 
   return warped_masked_mel_spectrogram, warped_mel_spectrogram
 
-# First, we need to load sample audio file
-# For the test, I use one of the 'Libiri Speech' data.
-audio_path = "./data"
-audio_file = "./data/61-70968-0002.wav"
-audio, sampling_rate = librosa.load(audio_file)
 
-# For extracting mel-spectrogram feature, I use 'LibSosa' python audio package.
-mel_spectrogram = librosa.feature.melspectrogram(y=audio, sr=sampling_rate, n_mels=128, fmax=8000)
-
-# we can see extracted mel-spectrogram using simple method 'specshow'
-plt.figure(figsize=(10, 4))
-librosa.display.specshow(librosa.power_to_db(mel_spectrogram, ref=np.max), y_axis='mel', fmax=8000, x_axis='time')
-plt.colorbar(format='%+2.0f dB')
-plt.title('Mel Spectrogram')
-plt.tight_layout()
-plt.show()
-
-# Augmentation using 'SpecAugment(Spectrogram augmentation)"
-warped_masked_mel_spectrogram, warped_mel_spectrogram = spec_augment(mel_spectrogram=mel_spectrogram,
-                                                                     time_warping_para=80,
-                                                                     time_masking_para=100,
-                                                                     frequency_masking_para=27,
-                                                                     num_mask=1)
-
-# Show time warped & masked spectrogram
-plt.figure(figsize=(10, 4))
-librosa.display.specshow(librosa.power_to_db(warped_masked_mel_spectrogram, ref=np.max), y_axis='mel', fmax=8000, x_axis='time')
-plt.colorbar(format='%+2.0f dB')
-plt.title('Warped & Masked Mel Spectrogram')
-plt.tight_layout()
-plt.show()
-
-
+def visualization_melspectrogram(mel_spectrogram, title):
+    """visualization_melspectrogram.
+    Args:
+      mel_spectrogram: mel_spectrogram to visualize.
+      title: plot title
+    """
+    # we can see mel-spectrogram using simple method 'specshow'
+    plt.figure(figsize=(10, 4))
+    librosa.display.specshow(librosa.power_to_db(mel_spectrogram, ref=np.max), y_axis='mel', fmax=8000, x_axis='time')
+    plt.colorbar(format='%+2.0f dB')
+    plt.title(title)
+    plt.tight_layout()
+    plt.show()
 
