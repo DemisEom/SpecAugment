@@ -15,7 +15,7 @@ pip install -r requirements.txt
 And then, run the specAugment.py program. It modifies the spectrogram by warping it in the time direction, masking blocks of consecutive frequency channels, and masking blocks of utterances in time.  
 
 ```bash
-python spec_augment.py
+python spec_augment_test.py
 ```
 
 <p align="center">
@@ -27,3 +27,4 @@ python spec_augment.py
 # Reference
 
 1. https://arxiv.org/pdf/1904.08779.pdf
+
