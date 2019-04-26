@@ -12,20 +12,21 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Tests for specaugment"""
+import argparse
 import librosa
 from SpecAugment import spec_augment
 
+parser = argparse.ArgumentParser(description='Spec Augment')
+parser.add_argument('--audio-path', default='./data/61-70970-0007.wav',
+                    help='The audio file.')
+
+args = parser.parse_args()
+
 if __name__ == "__main__":
 
-    # First, we need to load sample audio file
-    # For the test, I use one of the 'Libiri Speech' data.
-    audio_path = "./data"
-    audio_file = "./data/61-70970-0007.wav"
+    audio, sampling_rate = librosa.load(args.audio_path)
 
-    audio, sampling_rate = librosa.load(audio_file)
-
-    # For extracting mel-spectrogram feature, I use 'LibSosa' python audio package.
+    # For extracting mel-spectrogram feature, I used 'librosa' that a python package for audio and music signal processing.
     mel_spectrogram = librosa.feature.melspectrogram(y=audio, sr=sampling_rate, n_mels=128, fmax=8000)
 
     # we can see extracted mel-spectrogram using simple method 'specshow'
