@@ -19,8 +19,8 @@ python spec_augment_test.py
 ```
 
 <p align="center">
-  <img src="https://github.com/shelling203/specAugment/blob/master/images/Figure_1.png" alt="Example result of base spectrogram"/ width=600>
-  <img src="https://github.com/shelling203/specAugment/blob/master/images/Figure_2.png" alt="Example result of base spectrogram"/ width=600>
+  <img src="https://github.com/shelling203/specAugment/blob/master/SpecAugment/images/Figure_1.png" alt="Example result of base spectrogram"/ width=600>
+  <img src="https://github.com/shelling203/specAugment/blob/master/SpecAugment/images/Figure_2.png" alt="Example result of base spectrogram"/ width=600>
 </p>
 
 

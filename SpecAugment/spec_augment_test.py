@@ -14,9 +14,7 @@
 
 """Tests for specaugment"""
 import librosa
-import spec_augment
-import cv2
-import numpy as np
+from SpecAugment import spec_augment
 
 if __name__ == "__main__":
 
@@ -35,10 +33,10 @@ if __name__ == "__main__":
 
     # Augmentation using 'SpecAugment(Spectrogram augmentation)"
     warped_masked_mel_spectrogram, warped_mel_spectrogram = spec_augment.spec_augment(mel_spectrogram=mel_spectrogram,
-                                                                         time_warping_para=80,
-                                                                         time_masking_para=100,
-                                                                         frequency_masking_para=27,
-                                                                         num_mask=1)
+                                                                                      time_warping_para=80,
+                                                                                      time_masking_para=100,
+                                                                                      frequency_masking_para=27,
+                                                                                      num_mask=1)
 
     # Show time warped & masked spectrogram
     spec_augment.visualization_melspectrogram(mel_spectrogram=warped_masked_mel_spectrogram, title="Warped & Masked Mel Spectrogram")
