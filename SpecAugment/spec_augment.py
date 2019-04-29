@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 # ==============================================================================
-"""SpecAugment Implementation.
+"""SpecAugment Implementation for Tensorflow.
 Related paper : https://arxiv.org/pdf/1904.08779.pdf
 
 In this paper, show summarized parameters by each open datasets in Tabel 1.

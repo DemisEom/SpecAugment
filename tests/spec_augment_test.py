@@ -16,6 +16,8 @@
 
 import argparse
 import librosa
+import os, sys
+sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
 from SpecAugment import spec_augment
 
 parser = argparse.ArgumentParser(description='Spec Augment')
