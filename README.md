@@ -20,8 +20,8 @@ python spec_augment_test.py
 In test code, we using one of the [LibriSpeech dataset](http://www.openslr.org/12/).
 
 <p align="center">
-  <img src="https://github.com/shelling203/specAugment/blob/master/SpecAugment/images/Figure_1.png" alt="Example result of base spectrogram"/ width=600>
-  <img src="https://github.com/shelling203/specAugment/blob/master/SpecAugment/images/Figure_2.png" alt="Example result of base spectrogram"/ width=600>
+  <img src="https://github.com/shelling203/SpecAugment/blob/master/images/Figure_1.png" alt="Example result of base spectrogram"/ width=600>
+  <img src="https://github.com/shelling203/SpecAugment/blob/master/images/Figure_2.png" alt="Example result of base spectrogram"/ width=600>
 </p>
 
 
