@@ -17,6 +17,7 @@ And then, run the specAugment.py program. It modifies the spectrogram by warping
 ```bash
 python spec_augment_test.py
 ```
+In test code, we using one of the [LibriSpeech dataset](http://www.openslr.org/12/).
 
 <p align="center">
   <img src="https://github.com/shelling203/specAugment/blob/master/SpecAugment/images/Figure_1.png" alt="Example result of base spectrogram"/ width=600>
@@ -27,4 +28,3 @@ python spec_augment_test.py
 # Reference
 
 1. https://arxiv.org/pdf/1904.08779.pdf
-
