@@ -35,6 +35,7 @@ SM : Switchboard mild
 SS : Switchboard strong
 """
 
+import librosa
 import librosa.display
 import tensorflow as tf
 from tensorflow.contrib.image import sparse_image_warp
@@ -46,7 +47,8 @@ matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
 
-def spec_augment(mel_spectrogram, time_warping_para, frequency_masking_para, time_masking_para, num_mask):
+def spec_augment(mel_spectrogram, time_warping_para=80, frequency_masking_para=27,
+                 time_masking_para=100, frequency_mask_num=1, time_mask_num=1):
     """Spec augmentation Calculation Function.
 
     'SpecAugment' have 3 steps for audio data augmentation.
@@ -54,23 +56,26 @@ def spec_augment(mel_spectrogram, time_warping_para, frequency_masking_para, tim
     Second step is frequency masking, last step is time masking.
 
     # Arguments:
-      input(numpy array): Extracted mel-spectrogram.
+      mel_spectrogram(numpy array): audio file path of you want to warping and masking.
       time_warping_para(float): Augmentation parameter, "time warp parameter W".
-        If none, dafault = 80
+        If none, default = 80 for LibriSpeech.
       frequency_masking_para(float): Augmentation parameter, "frequency mask parameter F"
-        If none, dafault = 100
+        If none, default = 100 for LibriSpeech.
       time_masking_para(float): Augmentation parameter, "time mask parameter T"
-        If none, dafault = 27
-      num_mask(float): number of masking lines.
+        If none, default = 27 for LibriSpeech.
+      frequency_mask_num(float): number of frequency masking lines, "m_F".
+        If none, default = 1 for LibriSpeech.
+      time_mask_num(float): number of time masking lines, "m_T".
+        If none, default = 1 for LibriSpeech.
 
     # Returns
       mel_spectrogram(numpy array): warped and masked mel spectrogram.
     """
-
-    # Step 1 : Time warping (TO DO)
+    v = mel_spectrogram.shape[0]
     tau = mel_spectrogram.shape[1]
 
-    # Image warping control point setting
+    # Step 1 : Time warping (TO DO)
+    # Image warping control point setting.
     control_point_locations = np.asarray([[64, 64], [64, 80]])
     control_point_locations = constant_op.constant(
         np.float32(np.expand_dims(control_point_locations, 0)))
@@ -80,7 +85,7 @@ def spec_augment(mel_spectrogram, time_warping_para, frequency_masking_para, tim
     control_point_displacements = constant_op.constant(
         np.float32(control_point_displacements))
 
-    # mel spectrogram data type convert to tensor constant for sparse_image_warp
+    # mel spectrogram data type convert to tensor constant for sparse_image_warp.
     mel_spectrogram = mel_spectrogram.reshape([1, mel_spectrogram.shape[0], mel_spectrogram.shape[1], 1])
     mel_spectrogram_op = constant_op.constant(np.float32(mel_spectrogram))
     w = random.randint(0, time_warping_para)
@@ -93,23 +98,22 @@ def spec_augment(mel_spectrogram, time_warping_para, frequency_masking_para, tim
                                                      num_boundary_points=0
                                                      )
 
-    # Change data type of warp result to numpy array for masking step
+    # Change warp result's data type to numpy array for masking step.
     with tf.Session() as sess:
         warped_mel_spectrogram = sess.run(warped_mel_spectrogram_op)
 
     warped_mel_spectrogram = warped_mel_spectrogram.reshape([warped_mel_spectrogram.shape[1],
                                                              warped_mel_spectrogram.shape[2]])
 
-    # loop Masking line number
-    for i in range(num_mask):
-        # Step 2 : Frequency masking
+    # Step 2 : Frequency masking
+    for i in range(frequency_mask_num):
         f = np.random.uniform(low=0.0, high=frequency_masking_para)
         f = int(f)
-        v = 128  # Now hard coding but I will improve soon.
         f0 = random.randint(0, v - f)
         warped_mel_spectrogram[f0:f0 + f, :] = 0
 
-        # Step 3 : Time masking
+    # Step 3 : Time masking
+    for i in range(time_mask_num):
         t = np.random.uniform(low=0.0, high=time_masking_para)
         t = int(t)
         t0 = random.randint(0, tau - t)
@@ -118,8 +122,8 @@ def spec_augment(mel_spectrogram, time_warping_para, frequency_masking_para, tim
     return warped_mel_spectrogram
 
 
-def visualization_melspectrogram(mel_spectrogram, title):
-    """visualizing result of specAugment
+def visualization_spectrogram(mel_spectrogram, title):
+    """visualizing result of SpecAugment
 
     # Arguments:
       mel_spectrogram(ndarray): mel_spectrogram to visualize.

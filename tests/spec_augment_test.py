@@ -16,9 +16,10 @@
 
 import argparse
 import librosa
+from SpecAugment import spec_augment_tensorflow
+from SpecAugment import spec_augment_pytorch
 import os, sys
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
-from SpecAugment import spec_augment
 
 parser = argparse.ArgumentParser(description='Spec Augment')
 parser.add_argument('--audio-path', default='../data/61-70968-0002.wav',
@@ -41,23 +42,27 @@ masking_line_number = args.masking_line_number
 
 if __name__ == "__main__":
 
-    audio, sampling_rate = librosa.load(args.audio_path)
-
-    # For extracting mel-spectrogram feature, I used 'librosa' that a python package for audio and music signal processing.
-    mel_spectrogram = librosa.feature.melspectrogram(y=audio, sr=sampling_rate, n_mels=128, fmax=8000)
-
-    # we can see extracted mel-spectrogram using simple method 'specshow'
-    spec_augment.visualization_melspectrogram(mel_spectrogram=mel_spectrogram, title="Mel Spectrogram")
-
-    # Augmentation using 'SpecAugment(Spectrogram augmentation)"
-    warped_masked_mel_spectrogram = spec_augment.spec_augment(mel_spectrogram=mel_spectrogram,
-                                                              time_warping_para=time_warping_para,
-                                                              time_masking_para=time_masking_para,
-                                                              frequency_masking_para=frequency_masking_para,
-                                                              num_mask=masking_line_number)
+    # Step 0 : load audio file, extract mel spectrogram
+    audio, sampling_rate = librosa.load(audio_path)
+    mel_spectrogram = librosa.feature.melspectrogram(y=audio,
+                                                     sr=sampling_rate,
+                                                     n_mels=256,
+                                                     hop_length=128,
+                                                     fmax=8000)
+    # Calculate SpecAugment ver.tensorflow
+    warped_masked_spectrogram = spec_augment_tensorflow.spec_augment(mel_spectrogram=mel_spectrogram)
+    # print(warped_masked_spectrogram)
 
     # Show time warped & masked spectrogram
-    spec_augment.visualization_melspectrogram(mel_spectrogram=warped_masked_mel_spectrogram,
-                                              title="Warped & Masked Mel Spectrogram")
+    spec_augment_tensorflow.visualization_spectrogram(mel_spectrogram=warped_masked_spectrogram,
+                                                      title="tensorflow Warped & Masked Mel Spectrogram")
+
+    # Calculate SpecAugment ver.pytorch
+    warped_masked_spectrogram = spec_augment_pytorch.spec_augment(mel_spectrogram=mel_spectrogram)
+    print(warped_masked_spectrogram)
+
+    # Show time warped & masked spectrogram
+    spec_augment_tensorflow.visualization_spectrogram(mel_spectrogram=warped_masked_spectrogram,
+                                                      title="pytorch Warped & Masked Mel Spectrogram")
 
 
