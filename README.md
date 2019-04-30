@@ -22,7 +22,7 @@ $ python3
 
 ```python
 >>> import librosa
->>> from SpecAugment import spec_augment_tensorflow
+>>> from specAugment import spec_augment_tensorflow
 >>> audio, sampling_rate = librosa.load(audio_path)
 >>> mel_spectrogram = librosa.feature.melspectrogram(y=audio,
                                                      sr=sampling_rate,
