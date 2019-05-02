@@ -23,6 +23,7 @@ $ python3
 ```python
 >>> import librosa
 >>> from specAugment import spec_augment_tensorflow
+# If you are Pytorch, then import spec_augment_pytorch instead of spec_augment_tensorflow
 >>> audio, sampling_rate = librosa.load(audio_path)
 >>> mel_spectrogram = librosa.feature.melspectrogram(y=audio,
                                                      sr=sampling_rate,

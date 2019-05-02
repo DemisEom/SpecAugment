@@ -74,28 +74,31 @@ def spec_augment(mel_spectrogram, time_warping_para=80, frequency_masking_para=2
     v = mel_spectrogram.shape[0]
     tau = mel_spectrogram.shape[1]
 
-    # Step 1 : Time warping (TO DO)
+    # Step 1 : Time warping
     # Image warping control point setting.
-    control_point_locations = np.asarray([[64, 64], [64, 80]])
+    center_position = v/2
+    random_point = np.random.randint(low=time_warping_para, high=tau - time_warping_para)
+    # warping distance chose.
+    w = np.random.uniform(low=0, high=time_warping_para)
+
+    control_point_locations = [[center_position, random_point]]
     control_point_locations = constant_op.constant(
         np.float32(np.expand_dims(control_point_locations, 0)))
 
-    control_point_displacements = np.ones(
-        control_point_locations.shape.as_list())
-    control_point_displacements = constant_op.constant(
-        np.float32(control_point_displacements))
+    control_point_destination = [[center_position, random_point + w]]
+    control_point_destination = constant_op.constant(
+        np.float32(np.expand_dims(control_point_destination, 0)))
 
     # mel spectrogram data type convert to tensor constant for sparse_image_warp.
     mel_spectrogram = mel_spectrogram.reshape([1, mel_spectrogram.shape[0], mel_spectrogram.shape[1], 1])
     mel_spectrogram_op = constant_op.constant(np.float32(mel_spectrogram))
-    w = random.randint(0, time_warping_para)
 
     warped_mel_spectrogram_op, _ = sparse_image_warp(mel_spectrogram_op,
                                                      source_control_point_locations=control_point_locations,
-                                                     dest_control_point_locations=control_point_locations + control_point_displacements,
+                                                     dest_control_point_locations=control_point_destination,
                                                      interpolation_order=2,
                                                      regularization_weight=0,
-                                                     num_boundary_points=0
+                                                     num_boundary_points=1
                                                      )
 
     # Change warp result's data type to numpy array for masking step.
@@ -132,7 +135,7 @@ def visualization_spectrogram(mel_spectrogram, title):
     # Show mel-spectrogram using librosa's specshow.
     plt.figure(figsize=(10, 4))
     librosa.display.specshow(librosa.power_to_db(mel_spectrogram, ref=np.max), y_axis='mel', fmax=8000, x_axis='time')
-    plt.colorbar(format='%+2.0f dB')
+    # plt.colorbar(format='%+2.0f dB')
     plt.title(title)
     plt.tight_layout()
     plt.show()

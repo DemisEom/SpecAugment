@@ -49,6 +49,11 @@ if __name__ == "__main__":
                                                      n_mels=256,
                                                      hop_length=128,
                                                      fmax=8000)
+
+    # Show Raw mel-spectrogram
+    spec_augment_tensorflow.visualization_spectrogram(mel_spectrogram=mel_spectrogram,
+                                                      title="Raw Mel Spectrogram")
+
     # Calculate SpecAugment ver.tensorflow
     warped_masked_spectrogram = spec_augment_tensorflow.spec_augment(mel_spectrogram=mel_spectrogram)
     # print(warped_masked_spectrogram)

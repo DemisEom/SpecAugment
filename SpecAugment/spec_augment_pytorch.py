@@ -38,6 +38,7 @@ SS : Switchboard strong
 import librosa
 import librosa.display
 import math
+from skimage.transform import warp
 import numpy as np
 import random
 import matplotlib
@@ -72,18 +73,18 @@ def spec_augment(mel_spectrogram, time_warping_para=80, frequency_masking_para=2
     v = mel_spectrogram.shape[0]
     tau = mel_spectrogram.shape[1]
 
-    # Step 1 : Time warping (TO DO)
+    # Step 1 : Time warping (TO DO...)
     warped_mel_spectrogram = np.zeros(mel_spectrogram.shape,
                                       dtype=mel_spectrogram.dtype)
 
     for i in range(v):
         for j in range(tau):
-            offset_x = int(3.0 * math.sin(2 * 3.14 * i / 150))
-            offset_y = int(1.0 * math.cos(2 * 3.14 * j / 150))
-            if i + offset_y < v and j + offset_x < tau:
-                warped_mel_spectrogram[i, j] = mel_spectrogram[(i + offset_y) % v, (j + offset_x) % tau]
+            offset_x = 0
+            offset_y = 0
+            if i + offset_y < v:
+                warped_mel_spectrogram[i, j] = mel_spectrogram[(i + offset_y) % v, j]
             else:
-                warped_mel_spectrogram[i, j] = 0
+                warped_mel_spectrogram[i, j] = mel_spectrogram[i, j]
 
     # Step 2 : Frequency masking
     for i in range(frequency_mask_num):
@@ -112,7 +113,7 @@ def visualization_spectrogram(mel_spectrogram, title):
     # Show mel-spectrogram using librosa's specshow.
     plt.figure(figsize=(10, 4))
     librosa.display.specshow(librosa.power_to_db(mel_spectrogram, ref=np.max), y_axis='mel', fmax=8000, x_axis='time')
-    plt.colorbar(format='%+2.0f dB')
+    # plt.colorbar(format='%+2.0f dB')
     plt.title(title)
     plt.tight_layout()
     plt.show()
