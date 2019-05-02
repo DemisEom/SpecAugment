@@ -38,11 +38,10 @@ SS : Switchboard strong
 import librosa
 import librosa.display
 import math
-from skimage.transform import warp
 import numpy as np
 import random
 import matplotlib
-matplotlib.use('TkAgg')
+# matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
 
 
