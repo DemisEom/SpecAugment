@@ -1,5 +1,4 @@
-# SpecAugment
-
+# SpecAugment [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 This is a implementation of SpecAugment that speech data augmentation method which directly process the spectrogram with Tensorflow & Pytorch, introduced by Google Brain[1]. This is currently under the Apache 2.0, Please feel free to use for your project. Enjoy!
 
 ## How to use
