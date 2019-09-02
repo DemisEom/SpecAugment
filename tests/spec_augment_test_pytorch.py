@@ -16,7 +16,8 @@
 
 import argparse
 import librosa
-from SpecAugment import spec_augment_tensorflow
+import numpy as np
+import torch
 from SpecAugment import spec_augment_pytorch
 import os, sys
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))
@@ -50,24 +51,20 @@ if __name__ == "__main__":
                                                      hop_length=128,
                                                      fmax=8000)
 
+    # reshape spectrogram shape to [batch_size, time, frequency]
+    shape = mel_spectrogram.shape
+    mel_spectrogram = np.reshape(mel_spectrogram, (-1, shape[0], shape[1]))
+    mel_spectrogram = torch.from_numpy(mel_spectrogram)
+
     # Show Raw mel-spectrogram
-    spec_augment_tensorflow.visualization_spectrogram(mel_spectrogram=mel_spectrogram,
+    spec_augment_pytorch.visualization_spectrogram(mel_spectrogram=mel_spectrogram,
                                                       title="Raw Mel Spectrogram")
 
-    # Calculate SpecAugment ver.tensorflow
-    warped_masked_spectrogram = spec_augment_tensorflow.spec_augment(mel_spectrogram=mel_spectrogram)
-    # print(warped_masked_spectrogram)
-
-    # Show time warped & masked spectrogram
-    spec_augment_tensorflow.visualization_spectrogram(mel_spectrogram=warped_masked_spectrogram,
-                                                      title="tensorflow Warped & Masked Mel Spectrogram")
-
-    # Calculate SpecAugment ver.pytorch
+    # Calculate SpecAugment pytorch
     warped_masked_spectrogram = spec_augment_pytorch.spec_augment(mel_spectrogram=mel_spectrogram)
-    print(warped_masked_spectrogram)
 
     # Show time warped & masked spectrogram
-    spec_augment_tensorflow.visualization_spectrogram(mel_spectrogram=warped_masked_spectrogram,
+    spec_augment_pytorch.visualization_spectrogram(mel_spectrogram=warped_masked_spectrogram,
                                                       title="pytorch Warped & Masked Mel Spectrogram")
 
 
