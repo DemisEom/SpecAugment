@@ -41,7 +41,7 @@ import random
 import matplotlib
 matplotlib.use('TkAgg')
 import matplotlib.pyplot as plt
-from SpecAugment.sparse_image_warp_pytorch import sparse_image_warp
+from specAugment.sparse_image_warp_pytorch import sparse_image_warp
 import torch
 
 
