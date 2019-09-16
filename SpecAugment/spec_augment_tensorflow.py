@@ -166,9 +166,9 @@ def spec_augment(mel_spectrogram):
 
     warped_frequency_spectrogram = frequency_masking(warped_mel_spectrogram, v=v)
 
-    warped_frequency_time_sepctrogram = time_masking(warped_frequency_spectrogram, tau=tau)
+    warped_frequency_time_spectrogram = time_masking(warped_frequency_spectrogram, tau=tau)
 
-    return warped_frequency_time_sepctrogram
+    return warped_frequency_time_spectrogram
 
 
 def visualization_spectrogram(mel_spectrogram, title):
