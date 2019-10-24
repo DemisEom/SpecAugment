@@ -38,7 +38,7 @@ SS : Switchboard strong
 import librosa
 import librosa.display
 import tensorflow as tf
-from tensorflow.contrib.image import sparse_image_warp
+from tensorflow_addons.image import sparse_image_warp
 import numpy as np
 import matplotlib.pyplot as plt
 
