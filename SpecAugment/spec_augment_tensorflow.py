@@ -201,5 +201,3 @@ def visualization_tensor_spectrogram(mel_spectrogram, title):
     plt.title(title)
     plt.tight_layout()
     plt.show()
-    plt.savefig('test.png')
-    plt.close()
