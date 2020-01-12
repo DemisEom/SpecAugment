@@ -89,7 +89,7 @@ def spec_augment(mel_spectrogram, time_warping_para=80, frequency_masking_para=2
     tau = mel_spectrogram.shape[2]
 
     # Step 1 : Time warping
-    warped_mel_spectrogram = time_warp(mel_spectrogram)
+    warped_mel_spectrogram = time_warp(mel_spectrogram, W=time_warping_para)
 
     # Step 2 : Frequency masking
     for i in range(frequency_mask_num):
