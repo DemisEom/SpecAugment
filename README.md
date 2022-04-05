@@ -8,7 +8,7 @@ First, you need to have python 3 installed along with [Tensorflow](https://www.t
 Next, you need to install some audio libraries work properly. To install the requirement packages. Run the following command:
 
 ```bash
-pip3 install SpecAugment
+pip install git+https://github.com/seriousran/SpecAugment.git
 ```
 
 And then, run the specAugment.py program. It modifies the spectrogram by warping it in the time direction, masking blocks of consecutive frequency channels, and masking blocks of utterances in time.
